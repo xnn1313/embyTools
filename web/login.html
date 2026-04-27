@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - NanShare</title>
+    
+    <!-- Vuetify CSS -->
+    <link rel="stylesheet" href="assets/css/vuetify.min.css">
+    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        /* 背景动画 */
+        .main {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            overflow: hidden;
+        }
+        
+        /* ========== 海报背景图片 ========== */
+        .bg-wallpaper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .bg-wallpaper-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+        
+        /* 背景图片渐变遮罩 */
+        .bg-wallpaper-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(45, 55, 72, 33%) 0%, rgb(26, 32, 46) 100%);
+            z-index: 2;
+        }
+        
+        /* 背景图淡入淡出切换 */
+        .bg-wallpaper-enter {
+            animation: wallpaperFadeIn 1.2s ease-out forwards;
+        }
+        
+        @keyframes wallpaperFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* 有背景图时粒子隐藏 */
+        .has-wallpaper .bg-particles {
+            display: none;
+        }
+        
+        /* 有背景图时卡片更通透 */
+        .has-wallpaper .login-card {
+            opacity: 0.88;
+        }
+        
+        /* 背景粒子动画 */
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(61, 111, 213, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+        
+        .particle:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            right: 15%;
+            top: 60%;
+            animation-delay: 3s;
+            animation-duration: 20s;
+        }
+        
+        .particle:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 70%;
+            top: 10%;
+            animation-delay: 6s;
+            animation-duration: 30s;
+        }
+        
+        .particle:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            left: 30%;
+            bottom: 15%;
+            animation-delay: 2s;
+            animation-duration: 22s;
+        }
+        
+        .particle:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            right: 25%;
+            bottom: 30%;
+            animation-delay: 5s;
+            animation-duration: 28s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(30px, -30px) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-20px, 20px) scale(0.9);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translate(40px, 10px) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+        
+        /* 登录卡片毛玻璃效果 */
+        .login-card {
+            position: relative;
+            z-index: 10;
+            animation: cardSlideIn 0.6s ease-out;
+        }
+        
+        /* 强制覆盖 Vuetify v-card 主题背景色 */
+        .login-card.v-card,
+        .login-card.v-card.v-card--variant-flat,
+        .login-card.v-card.v-card--variant-elevated {
+            background: rgba(22, 29, 44, 0.75) !important;
+            backdrop-filter: blur(20px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+        }
+        
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Logo容器 */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .logo-wrapper {
+            display: inline-block;
+            width: 360px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Logo 光晕效果 */
+        .logo-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(61, 111, 213, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+            filter: blur(30px);
+        }
+        
+        .logo-wrapper:hover::before {
+            opacity: 1;
+        }
+        
+        .logo-wrapper:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 12px 32px rgba(61, 111, 213, 0.5)) 
+                    drop-shadow(0 0 40px rgba(61, 111, 213, 0.3));
+        }
+        
+        .logo {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4))
+                    drop-shadow(0 0 20px rgba(61, 111, 213, 0.2));
+        }
+        
+        /* 版本号标签 */
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(61, 111, 213, 0.15);
+            border: 1px solid rgba(61, 111, 213, 0.3);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(61, 111, 213, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(61, 111, 213, 0);
+            }
+        }
+        
+        .version-badge:hover {
+            background: rgba(61, 111, 213, 0.25);
+            border-color: rgba(61, 111, 213, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .version-badge img {
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .version-badge:hover img {
+            opacity: 1;
+        }
+        
+        /* 输入框动画 */
+        .v-text-field {
+            animation: inputSlideIn 0.5s ease-out backwards;
+        }
+        
+        .v-text-field:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        
+        .v-text-field:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes inputSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* 登录按钮动画 */
+        .login-btn {
+            animation: btnSlideIn 0.5s ease-out 0.4s backwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .login-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        @keyframes btnSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .login-card {
+                min-width: 85vw !important;
+                max-width: 85vw !important;
+                margin: 0 auto;
+            }
+            
+            .logo-wrapper {
+                width: 280px !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 15px;
+            }
+            
+            .particle {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-card {
+                min-width: 90vw !important;
+                max-width: 90vw !important;
+                margin: 0 auto;
+            }
+            
+            .logo-wrapper {
+                width: 240px !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 10px;
+            }
+            
+            .v-card-text {
+                padding: 16px !important;
+            }
+            
+            .version-badge {
+                font-size: 12px !important;
+                padding: 6px 12px !important;
+            }
+        }
+        
+        /* 错误提示 */
+        .v-alert {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+        
+        .error-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            min-width: 280px;
+            max-width: 90vw;
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px) scale(0.9);
+            }
+        }
+        
+        .error-alert.fade-out {
+            animation: fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="main" :class="{ 'has-wallpaper': isImageLoaded }">
+            <!-- 海报背景图片 -->
+            <template v-for="image in backgroundImages">
+                <div v-if="backgroundImageUrl === image" class="bg-wallpaper bg-wallpaper-enter" :key="image">
+                    <img :src="image" class="bg-wallpaper-img" @load="isImageLoaded = true" />
+                    <div class="bg-wallpaper-overlay"></div>
+                </div>
+            </template>
+            
+            <!-- 背景粒子（图片加载前的后备） -->
+            <div class="bg-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            
+            <!-- 登录卡片 -->
+            <v-card 
+                class="login-card px-7 pt-5 rounded-xl"
+                min-width="420"
+                max-width="420"
+                variant="flat"
+            >
+                <v-card-text class="mt-3">
+                    <v-form @submit.prevent="handleLogin">
+                        <!-- Logo -->
+                        <div class="d-flex flex-column align-center mb-4 mt-6">
+                            <div class="logo-container">
+                                <div class="logo-wrapper">
+                                    <img :src="logoSrc" class="logo" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 用户名 -->
+                        <v-text-field
+                            v-model="form.username"
+                            label="用户名"
+                            variant="outlined"
+                            required
+                            hide-details
+                            class="mb-9"
+                            name="username"
+                            autocomplete="username"
+                            prepend-inner-icon="mdi-account-outline"
+                        ></v-text-field>
+                        
+                        <!-- 密码 -->
+                        <v-text-field
+                            v-model="form.password"
+                            :type="showPassword ? 'text' : 'password'"
+                            label="密码"
+                            variant="outlined"
+                            hide-details
+                            :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                            @click:append-inner="showPassword = !showPassword"
+                            class="mb-8 password-field"
+                            name="password"
+                            autocomplete="current-password"
+                            prepend-inner-icon="mdi-lock-outline"
+                        ></v-text-field>
+                        
+                        <!-- 登录按钮 -->
+                        <v-btn
+                            type="submit"
+                            color="primary"
+                            block
+                            size="large"
+                            :loading="loading"
+                            class="login-btn mb-5"
+                            style="height: 48px; font-size: 16px; font-weight: 600; border-radius: 12px;"
+                        >
+                            <v-icon left class="mr-2">mdi-login</v-icon>
+                            登录
+                        </v-btn>
+                        
+                        <!-- 版本号 -->
+                        <div class="d-flex justify-center">
+                            <div class="version-badge">
+                                <img src="assets/images/github.png" width="18" height="18" style="filter: brightness(1.2);">
+                                <span>NanShare v{{ version }}</span>
+                            </div>
+                        </div>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+            
+            <!-- 错误提示 - 固定在顶部 -->
+            <div v-if="errorMessage" class="error-alert" :class="{ 'fade-out': errorFading }">
+                <v-alert
+                    type="error"
+                    variant="flat"
+                    density="comfortable"
+                    closable
+                    @click:close="clearError"
+                    style="border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);"
+                >
+                    {{ errorMessage }}
+                </v-alert>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vue 和 Vuetify -->
+    <script src="assets/js/vue.global.prod.js"></script>
+    <script src="assets/js/vuetify.min.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        const { createVuetify } = Vuetify;
+        
+        // 创建 Vuetify 实例
+        const vuetify = createVuetify({
+            theme: {
+                defaultTheme: 'dark',
+                themes: {
+                    dark: {
+                        colors: {
+                            background: '#111827',
+                            surface: '#161D2C',
+                            primary: '#3D6FD5',
+                            error: '#FF4C51',
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 创建 Vue 应用
+        const app = createApp({
+            data() {
+                return {
+                    form: {
+                        username: '',
+                        password: ''
+                    },
+                    showPassword: false,
+                    loading: false,
+                    errorMessage: '',
+                    errorFading: false,
+                    logoSrc: 'assets/images/sidebar-icon.png',
+                    version: 'null',  // 从 API 加载（version.py），读取不到显示 null
+                    // 海报背景相关
+                    backgroundImages: [],
+                    backgroundImageUrl: '',
+                    isImageLoaded: false,
+                    _wallpaperTimer: null
+                };
+            },
+            
+            async mounted() {
+                // 检查是否已登录
+                if (localStorage.getItem('auth_token')) {
+                    window.location.href = '/';
+                    return;
+                }
+                
+                // 加载版本号
+                await this.loadVersion();
+                
+                // 加载海报背景
+                await this.fetchWallpapers();
+                
+                // 每隔5秒随机切换背景图片
+                if (this.backgroundImages.length > 1) {
+                    this._wallpaperTimer = setInterval(() => {
+                        const idx = Math.floor(Math.random() * this.backgroundImages.length);
+                        this.backgroundImageUrl = this.backgroundImages[idx];
+                    }, 5000);
+                }
+            },
+            
+            beforeUnmount() {
+                if (this._wallpaperTimer) {
+                    clearInterval(this._wallpaperTimer);
+                    this._wallpaperTimer = null;
+                }
+            },
+            
+            methods: {
+                async fetchWallpapers() {
+                    try {
+                        const response = await fetch('/api/login/wallpapers');
+                        const data = await response.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            this.backgroundImages = data;
+                            this.backgroundImageUrl = data[0];
+                        }
+                    } catch (e) {
+                        console.log('加载背景图片失败:', e);
+                    }
+                },
+                
+                async loadVersion() {
+                    try {
+                        const response = await fetch('/api/version');
+                        const data = await response.json();
+                        if (data.success && data.version) {
+                            this.version = data.version;
+                        }
+                    } catch (error) {
+                        console.error('加载版本号失败:', error);
+                        // 使用默认版本号
+                    }
+                },
+                
+                showError(message) {
+                    this.errorFading = false;
+                    this.errorMessage = message;
+                    // 3秒后自动消失
+                    setTimeout(() => {
+                        this.clearError();
+                    }, 3000);
+                },
+                
+                clearError() {
+                    this.errorFading = true;
+                    setTimeout(() => {
+                        this.errorMessage = '';
+                        this.errorFading = false;
+                    }, 300);
+                },
+                
+                async handleLogin() {
+                    this.errorMessage = '';
+                    
+                    if (!this.form.username || !this.form.password) {
+                        this.showError('请输入用户名和密码');
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    
+                    try {
+                        const response = await fetch('/api/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                username: this.form.username,
+                                password: this.form.password
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // 保存 token
+                            localStorage.setItem('auth_token', data.data.token);
+                            localStorage.setItem('username', data.data.username);
+                            
+                            // 跳转到主页
+                            window.location.href = '/';
+                        } else {
+                            this.showError(data.message || '登录失败');
+                        }
+                    } catch (error) {
+                        console.error('登录错误:', error);
+                        this.showError('登录失败，请检查网络连接');
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        });
+        
+        app.use(vuetify);
+        app.mount('#app');
+    </script>
+</body>
+</html>

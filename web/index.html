@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 缓存控制 -->
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="expires" content="0">
+
+    <!-- 基础设置 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NanShare</title>
+
+    <!-- SEO相关 -->
+    <meta name="Robots" content="noindex,nofollow,noarchive">
+    <meta name="referrer" content="never">
+    <meta name="description" content="NanShare">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <!-- 图标设置 -->
+    <link rel="icon" type="image/png" href="assets/images/app-icon.png">
+    <link rel="shortcut icon" type="image/png" href="assets/images/app-icon.png">
+    <link rel="apple-touch-icon" href="assets/images/app-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/app-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/app-icon.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="assets/images/app-icon.png">
+
+    <!-- 移动端配置 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NanShare">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- 主题颜色 -->
+    <meta name="msapplication-TileColor" content="#7D34FD">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#28243D" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F4F5FA" media="(prefers-color-scheme: light)">
+
+    <style>
+        /* 检测灵动岛的安全区域 */
+        @supports(padding-top: env(safe-area-inset-top)) {
+            :root {
+                --safe-area-inset-top: env(safe-area-inset-top);
+                --safe-area-inset-bottom: env(safe-area-inset-bottom);
+                --safe-area-inset-left: env(safe-area-inset-left);
+                --safe-area-inset-right: env(safe-area-inset-right);
+            }
+        }
+    </style>
+
+    <!-- 本地 CSS -->
+    <link rel="stylesheet" href="assets/css/vuetify.min.css">
+    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/css/nprogress.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- 自动跳转到仪表盘 -->
+    <script>
+        if (!window.location.hash || window.location.hash === '#' || window.location.hash === '#/') {
+            window.location.hash = '#/dashboard';
+        }
+    </script>
+    
+    <div id="app"></div>
+
+    <!-- 本地 JavaScript -->
+    <script src="assets/js/vue.global.prod.js"></script>
+    <script src="assets/js/vuetify.min.js"></script>
+    
+    <!-- NProgress 顶部进度条 -->
+    <script src="assets/js/nprogress.min.js"></script>
+    <!-- QR Code 生成库 -->
+    <script src="assets/js/qrcode.min.js"></script>
+    <!-- Ace Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.2/src-min-noconflict/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.2/src-min-noconflict/mode-yaml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.2/src-min-noconflict/theme-dracula.js"></script>
+    <!-- 应用配置 -->
+    <script src="js/config.js"></script>
+    <!-- 公共工具 -->
+    <script src="js/log-utils.js"></script>
+    <script src="js/auth-status.js"></script>
+    <!-- 路由管理 -->
+    <script src="js/router.js"></script>
+    <!-- 页面组件 -->
+    <script src="js/pages/dashboard.js"></script>
+    <script src="js/pages/cache.js"></script>
+    <!-- 媒体服务器子页面 -->
+    <script src="js/pages/media_server/helper_emby.js"></script>
+    <script src="js/pages/media_server/fast_transfer.js"></script>
+    <script src="js/pages/media_server/media_server.js"></script>
+    <!-- STRM 工具子页面 -->
+    <script src="js/pages/strm_tools/share_strm.js"></script>
+    <script src="js/pages/strm_tools/strm_123.js"></script>
+    <script src="js/pages/strm_tools/strm_tools.js"></script>
+    <script src="js/pages/file_manager.js"></script>
+    <script src="js/pages/file_transfer.js"></script>
+    <script src="js/pages/transfer_config.js"></script>
+    <!-- 文件整理子页面 -->
+    <script src="js/pages/file_organize/file_organize.js"></script>
+    <script src="js/pages/transfer_history.js"></script>
+    <script src="js/pages/logs.js"></script>
+    <script src="js/pages/settings.js"></script>
+    <!-- 工具箱子页面 -->
+    <script src="js/pages/toolbox/helper115.js"></script>
+    <script src="js/pages/toolbox/helper123.js"></script>
+    <script src="js/pages/toolbox/helper_quark.js"></script>
+    <script src="js/pages/toolbox/helper_cloud189.js"></script>
+    <script src="js/pages/toolbox/helper_cd2.js"></script>
+    <script src="js/pages/toolbox/helper_tg.js"></script>
+    <script src="js/pages/toolbox/hdhive_helper.js"></script>
+    <script src="js/pages/toolbox/hdhive.js"></script>
+    <script src="js/pages/toolbox/transfer_115.js"></script>
+
+    <script src="js/pages/toolbox/cleaner.js"></script>
+    <script src="js/pages/toolbox/qrcode.js"></script>
+    <script src="js/pages/toolbox/qrcode_open.js"></script>
+
+    <script src="js/pages/toolbox/strm_checker.js"></script>
+    <script src="js/pages/toolbox/wiki.js"></script>
+    <script src="js/pages/toolbox/gpt_recognize.js"></script>
+    <script src="js/pages/toolbox/tg_forward_logs.js"></script>
+    <script src="js/pages/toolbox/tg_forward.js"></script>
+    <script src="js/pages/toolbox/strm_backup.js"></script>
+    <script src="js/pages/toolbox/empty_folder_cleaner.js"></script>
+    <script src="js/pages/toolbox/emby_gap_filler.js"></script>
+    <script src="js/pages/toolbox/emby_gap_checker.js"></script>
+    <script src="js/pages/toolbox/chart_subscribe.js"></script>
+    <script src="js/pages/toolbox/ed2k_strm.js"></script>
+    <script src="js/pages/toolbox/bulk_transfer.js?v=20260409"></script>
+    <script src="js/pages/toolbox/toolbox.js"></script>
+    <!-- Docker 管理页面 -->
+    <script src="js/pages/docker_manager.js"></script>
+    <!-- 订阅页面 -->
+    <script src="js/pages/subscribe.js"></script>
+    <!-- 看板页面 -->
+    <script src="js/pages/media_browse.js"></script>
+    <script src="js/pages/person_detail.js"></script>
+    <script src="js/pages/discover_detail.js"></script>
+    <script src="js/pages/discover.js"></script>
+    <!-- 应用主文件 -->
+    <script src="js/app.js"></script>
+</body>
+</html>
