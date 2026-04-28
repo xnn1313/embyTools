@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  nextfind:
+    image: xrq13/nextfind-bypass:latest
+    container_name: nextfind
+    ports:
+      - "8092:8092"
+    volumes:
+      # 持久化配置数据
+      - ./nextfind_config:/Config
+    restart: unless-stopped

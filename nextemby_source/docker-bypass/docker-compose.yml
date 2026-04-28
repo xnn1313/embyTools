@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  nextemby:
+    image: xrq13/nextemby-bypass:latest
+    container_name: nextemby
+    ports:
+      - "8091:8091"
+    volumes:
+      # 持久化配置数据 - 改成你 NAS 上的实际路径
+      - ./nextemby_config:/Config
+    restart: unless-stopped
